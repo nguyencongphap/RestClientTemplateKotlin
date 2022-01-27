@@ -46,6 +46,7 @@ class TweetsAdapter (val tweets: ArrayList<Tweet>) : RecyclerView.Adapter<Tweets
         // name will end up being blank. This helps us avoid that nasty NoPointerException
         holder.tvUsername.text = tweet.user?.name
         holder.tvTweetBody.text = tweet.body
+        holder.tvTimestamp.text = Tweet.getFormattedTimestamp(tweet.createdAt)
         // use 3rd party library Glide to load images easily
         Glide.with(holder.itemView).load(tweet.user?.publicImageUrl).into(holder.ivProfileImage)
     }
@@ -79,5 +80,6 @@ class TweetsAdapter (val tweets: ArrayList<Tweet>) : RecyclerView.Adapter<Tweets
         val ivProfileImage = itemView.findViewById<ImageView>(R.id.ivProfileImage)
         val tvUsername = itemView.findViewById<TextView>(R.id.tvUsername)
         val tvTweetBody = itemView.findViewById<TextView>(R.id.tvTweetBody)
+        val tvTimestamp = itemView.findViewById<TextView>(R.id.tvTimestamp)
     }
 }

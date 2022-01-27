@@ -33,5 +33,9 @@ class Tweet {
             }
             return tweets
         }
+
+        fun getFormattedTimestamp(createdAt : String) : String {
+            return TimeFormatter.getTimeDifference(createdAt)
+        }
     }
 }
