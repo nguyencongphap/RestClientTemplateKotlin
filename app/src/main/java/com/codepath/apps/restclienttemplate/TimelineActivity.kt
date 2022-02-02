@@ -3,6 +3,9 @@ package com.codepath.apps.restclienttemplate
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -66,6 +69,30 @@ class TimelineActivity : AppCompatActivity() {
         // Call populateHomeTimeline once var client is initialized
         populateHomeTimeline();
     }
+
+    // onCreateOptionsMenu and onOptionsItemSelected are two methods we have to override
+    // to get the menu going
+    // onCreateOptionsMenu inflates the menu resource file want to use so that that menu
+    // can be associated with this TimelineActivity. Like when we say:
+    // "hey, inside this activity, this is the layout menu that we should use"
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        // Inflate the right menu resource file
+        menuInflater.inflate(R.menu.menu_main, menu)
+        // return false means that the above menu won't be inflated and this menu won't
+        // be shown. So, we need to return true.
+        return true
+    }
+
+    // Define what happens when a specific type of item in the menu is clicked.
+    // Handles clicks on menu item
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.compose) {
+            Toast.makeText(this, "Ready to compose tweet!", Toast.LENGTH_SHORT).show()
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
 
     // This method utilizes the TwitterClient class to actually populate the home timeline
     fun populateHomeTimeline() {
