@@ -1,5 +1,6 @@
 package com.codepath.apps.restclienttemplate
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,6 +8,9 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -84,6 +88,34 @@ class TimelineActivity : AppCompatActivity() {
         return true
     }
 
+    val startForResult1 = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val intent = result.data
+            // Handle the Intent
+        }
+    }
+
+    // Create a callback
+    // ActivityOne.java, time to handle the result of the sub-activity
+    val startForResult = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()) {
+        result -> if (result.resultCode == Activity.RESULT_OK) {
+
+            val data: Intent? = result.data
+
+            // Get data from our intent (our tweet)
+            val tweet = result.data?.getParcelableExtra("tweet") as Tweet
+
+            // Update timeline
+            // Modifying the data source of tweets
+            tweets.add(0, tweet)
+
+            // Update adapter
+            adapter.notifyItemInserted(0)
+            rvTweets.smoothScrollToPosition(0)
+        }
+    }
+
     // Define what happens when a specific type of item in the menu is clicked.
     // Handles clicks on menu item
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -93,12 +125,17 @@ class TimelineActivity : AppCompatActivity() {
         if (item.itemId == R.id.compose) {
             // Navigate to compose screen
             val intent = Intent(this, ComposeActivity::class.java)
-            startActivity(intent)
+            // startActivityForResult is like startActivity, but startActivityForResult also
+            // expects some result back.
+            // REQUEST_CODE can be any integer we want to use. REQUEST_CODE is important
+            // because we need to use REQUEST_CODE in the onActivityResult to tell ourselves
+            // that hey, this is us coming back from the activity we first launched and asked for
+//            startActivityForResult(intent, REQUEST_CODE)
+            startForResult.launch(intent)
         }
 
         return super.onOptionsItemSelected(item)
     }
-
 
     // This method utilizes the TwitterClient class to actually populate the home timeline
     fun populateHomeTimeline() {
@@ -150,5 +187,6 @@ class TimelineActivity : AppCompatActivity() {
     // create a companion object so we can have a TAG variable for this class
     companion object {
         val TAG = "TimelineActivity"
+        val REQUEST_CODE = 10
     }
 }

@@ -1,14 +1,15 @@
 package com.codepath.apps.restclienttemplate.models
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import org.json.JSONObject
 
-class User {
+@Parcelize
+class User(var name: String = "", var screenName: String = "", var publicImageUrl: String = "") :
+    Parcelable {
 
     // Should be var instead of val because we start out not knowing what they are and then we need
     // to change it once we parse the json
-    var name: String = ""
-    var screenName: String = ""
-    var publicImageUrl: String = ""
 
     // companion object is something that we can reference without create a new instance of this
     // class. Companion object is like a "static place" to put static variables and methods.
